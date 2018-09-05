@@ -8,7 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 
-import com.gutoomota.cuboschallenge.Controller
+import com.gutoomota.cuboschallenge.Presenter
 import com.gutoomota.cuboschallenge.R
 import com.gutoomota.cuboschallenge.model.Movie
 import com.gutoomota.cuboschallenge.view.adapters.MovieAdapter
@@ -18,7 +18,7 @@ import java.util.Objects
 
 class FavoriteListActivity : AppCompatActivity() {
 
-    private var controller: Controller? = null
+    private var presenter: Presenter? = null
 
 
     private val movies: MutableList<Movie>? by lazy { mutableListOf<Movie>() }
@@ -31,7 +31,7 @@ class FavoriteListActivity : AppCompatActivity() {
         Objects.requireNonNull<ActionBar>(supportActionBar).setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        controller = application as Controller
+        presenter = application as Presenter
 
         progressBar!!.visibility = View.GONE
         movieAdapter = MovieAdapter(this.movies, this)
@@ -68,7 +68,7 @@ class FavoriteListActivity : AppCompatActivity() {
         super.onResume()
 
         movies?.clear()
-        movies?.addAll(controller!!.movieDao!!.allRegisters)
+        movies?.addAll(presenter!!.movieDao!!.allRegisters)
         movieAdapter?.notifyDataSetChanged()
     }
 }

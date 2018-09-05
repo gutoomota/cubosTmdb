@@ -13,7 +13,7 @@ import android.widget.TextView
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.gutoomota.cuboschallenge.Controller
+import com.gutoomota.cuboschallenge.Presenter
 import com.gutoomota.cuboschallenge.R
 import com.gutoomota.cuboschallenge.model.Movie
 import com.gutoomota.cuboschallenge.util.MovieImageUrlBuilder
@@ -22,7 +22,7 @@ import com.gutoomota.cuboschallenge.view.activities.DetailsActivity
 class MovieAdapter(private val movies: MutableList<Movie>?, private val activity: AppCompatActivity) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View, private val activity: AppCompatActivity) : RecyclerView.ViewHolder(itemView) {
-        private val controller: Controller = activity.applicationContext as Controller
+        private val presenter: Presenter = activity.applicationContext as Presenter
 
         private val clItem: ConstraintLayout = itemView.findViewById(R.id.clItem)
         private val titleTextView: TextView = itemView.findViewById(R.id.tvTitle)
@@ -35,11 +35,11 @@ class MovieAdapter(private val movies: MutableList<Movie>?, private val activity
 
             ivFavorite.setOnClickListener {
                 if (movie.favorite) {
-                    controller.movieDao?.deleteRegister(movie.id)
+                    presenter.movieDao?.deleteRegister(movie.id)
                     movie.favorite = false
                 } else {
                     movie.favorite = true
-                    controller.movieDao?.insertRegister(movie)
+                    presenter.movieDao?.insertRegister(movie)
                 }
 
                 ivFavorite.isActivated = movie.favorite

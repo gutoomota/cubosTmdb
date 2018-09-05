@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.gutoomota.cuboschallenge.R
+import com.gutoomota.cuboschallenge.base.UILogHandler
 import com.gutoomota.cuboschallenge.data.Cache
 import com.gutoomota.cuboschallenge.model.Movie
 import com.gutoomota.cuboschallenge.view.activities.HomeActivity
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.movielist_fragment.*
 
 import java.util.ArrayList
 
-class MovieListFragment : Fragment() {
+class MovieListFragment : Fragment(), UILogHandler {
 
     private var activity: HomeActivity? = null
 
@@ -86,5 +87,18 @@ class MovieListFragment : Fragment() {
 
         if (movies!!.size < 10 && activity!!.totalPages > activity!!.currentPage)
             activity!!.requestNextPage()
+    }
+
+    override fun displayLog(log: String) {
+        if (tvLog != null ) {
+            tvLog.visibility = View.VISIBLE
+            tvLog.text = log
+        }
+        setProgressBarVisible(false)
+    }
+
+    override fun hideLog() {
+        if (tvLog != null )
+            tvLog.visibility = View.GONE
     }
 }

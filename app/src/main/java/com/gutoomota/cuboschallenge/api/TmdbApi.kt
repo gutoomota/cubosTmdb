@@ -1,7 +1,7 @@
 package com.gutoomota.cuboschallenge.api
 
 import com.gutoomota.cuboschallenge.data.Cache
-import com.gutoomota.cuboschallenge.model.UpcomingMoviesResponse
+import com.gutoomota.cuboschallenge.model.MoviesResponse
 
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -15,7 +15,7 @@ interface TmdbApi {
             @Query("language") language: String,
             @Query("page") page: Long?,
             @Query("region") region: String
-    ): Observable<UpcomingMoviesResponse>
+    ): Observable<MoviesResponse>
 
     @GET("search/movie")
     fun searchMovies(
@@ -24,7 +24,7 @@ interface TmdbApi {
             @Query("query") query: String,
             @Query("page") page: Long?,
             @Query("region") region: String
-    ): Observable<UpcomingMoviesResponse>
+    ): Observable<MoviesResponse>
 
     companion object {
 

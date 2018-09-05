@@ -16,16 +16,6 @@
             app:tabGravity="fill"/>
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/tvLog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="@color/colorWarning"
-        android:textSize="@dimen/dimenMediumText"
-        android:textStyle="bold"
-        android:visibility="gone"/>
-
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"

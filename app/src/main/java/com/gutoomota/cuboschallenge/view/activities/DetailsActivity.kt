@@ -8,7 +8,7 @@ import android.view.View
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.gutoomota.cuboschallenge.Controller
+import com.gutoomota.cuboschallenge.Presenter
 import com.gutoomota.cuboschallenge.R
 import com.gutoomota.cuboschallenge.base.UILogHandler
 import com.gutoomota.cuboschallenge.model.Movie
@@ -20,7 +20,7 @@ import java.util.Objects
 
 class DetailsActivity : AppCompatActivity(), UILogHandler, View.OnClickListener {
 
-    private var controller: Controller? = null
+    private var presenter: Presenter? = null
 
     private var movie: Movie? = null
 
@@ -31,7 +31,7 @@ class DetailsActivity : AppCompatActivity(), UILogHandler, View.OnClickListener 
         Objects.requireNonNull<ActionBar>(supportActionBar).setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        controller = application as Controller
+        presenter = application as Presenter
 
         val intent = intent
         movie = intent.getSerializableExtra("movie") as Movie
@@ -67,7 +67,7 @@ class DetailsActivity : AppCompatActivity(), UILogHandler, View.OnClickListener 
     override fun onResume() {
         super.onResume()
 
-        if (!NetworkObserver.getInstance().isNetworkAvailable(controller!!))
+        if (!NetworkObserver.getInstance().isNetworkAvailable(presenter!!))
             displayLog(resources.getStringArray(R.array.warning)[0])
     }
 
@@ -75,11 +75,11 @@ class DetailsActivity : AppCompatActivity(), UILogHandler, View.OnClickListener 
         when (view.id) {
             R.id.ivFavorite -> {
                 if (movie!!.favorite) {
-                    controller!!.movieDao?.deleteRegister(movie!!.id)
+                    presenter!!.movieDao?.deleteRegister(movie!!.id)
                     movie!!.favorite = false
                 } else {
                     movie!!.favorite = true
-                    controller!!.movieDao?.insertRegister(movie!!)
+                    presenter!!.movieDao?.insertRegister(movie!!)
                 }
 
                 ivFavorite.isActivated = movie!!.favorite

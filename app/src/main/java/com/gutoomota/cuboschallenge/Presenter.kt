@@ -8,7 +8,7 @@ import com.gutoomota.cuboschallenge.api.TmdbApi
 import com.gutoomota.cuboschallenge.base.MovieListReceiver
 import com.gutoomota.cuboschallenge.dao.MovieDao
 import com.gutoomota.cuboschallenge.data.Cache
-import com.gutoomota.cuboschallenge.model.UpcomingMoviesResponse
+import com.gutoomota.cuboschallenge.model.MoviesResponse
 import com.gutoomota.cuboschallenge.util.MovieImageUrlBuilder
 import com.gutoomota.cuboschallenge.util.NetworkObserver
 
@@ -19,7 +19,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class Controller : Application() {
+class Presenter : Application() {
 
     private var movieListReceiver: MovieListReceiver? = null
 
@@ -85,6 +85,7 @@ class Controller : Application() {
                 api?.topRated(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, java.lang.Long.valueOf(page!!.toLong()), TmdbApi.DEFAULT_REGION)
                         ?.subscribeOn(Schedulers.io())
                         ?.observeOn(AndroidSchedulers.mainThread())
+                        ?.onErrorReturn { retrofitErrorHandler() }
                         ?.subscribe { response -> returnDataToList(response, requestKey) }
 
             } catch (e: Exception) {
@@ -104,6 +105,7 @@ class Controller : Application() {
                 api?.searchMovies(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, query, java.lang.Long.valueOf(page!!.toLong()), TmdbApi.DEFAULT_REGION)
                         ?.subscribeOn(Schedulers.io())
                         ?.observeOn(AndroidSchedulers.mainThread())
+                        ?.onErrorReturn { retrofitErrorHandler() }
                         ?.subscribe { response -> returnDataToList(response, requestKey) }
             } catch (e: Exception) {
                 Log.d("RetrofitError", e.toString())
@@ -113,9 +115,14 @@ class Controller : Application() {
             movieListReceiver!!.displayLog(resources.getStringArray(R.array.warning)[0])
     }
 
-    private fun returnDataToList(response: UpcomingMoviesResponse, requestKey: String) {
+    private fun retrofitErrorHandler() : MoviesResponse {
+        Log.d("MAMM", "called by retrofit")
+        movieListReceiver!!.displayLog(resources.getStringArray(R.array.warning)[0])
+        return MoviesResponse()
+    }
 
-        Log.d("MAMM", "teste")
+    private fun returnDataToList(response: MoviesResponse, requestKey: String) {
+
         if (response.results != null) {
             for (movie in response.results!!)
                 if (movieDao?.getRegister(movie.id) != null)

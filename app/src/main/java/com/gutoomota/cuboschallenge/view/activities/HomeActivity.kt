@@ -9,11 +9,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.support.v7.widget.SearchView
 import android.widget.Toast
 
-import com.gutoomota.cuboschallenge.Controller
+import com.gutoomota.cuboschallenge.Presenter
 import com.gutoomota.cuboschallenge.R
 import com.gutoomota.cuboschallenge.base.MovieListReceiver
 import com.gutoomota.cuboschallenge.data.Cache
@@ -28,7 +27,7 @@ import java.util.ArrayList
 
 class HomeActivity : AppCompatActivity(), MovieListReceiver, TextWatcher {
 
-    private var controller: Controller? = null
+    private var presenter: Presenter? = null
 
     private val tabs: MutableList<MovieListFragment>? by lazy { mutableListOf<MovieListFragment>() }
     private var currentTab: MovieListFragment? = null
@@ -44,8 +43,8 @@ class HomeActivity : AppCompatActivity(), MovieListReceiver, TextWatcher {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_activity)
 
-        controller = application as Controller
-        controller!!.setMovieListReceiver(this)
+        presenter = application as Presenter
+        presenter!!.setMovieListReceiver(this)
 
         setupViewPager(viewPager)
 
@@ -67,7 +66,7 @@ class HomeActivity : AppCompatActivity(), MovieListReceiver, TextWatcher {
         })
 
         requestKey = requestKeyBuilder.generateRandomKey(keyLength)
-        controller!!.getInitialData(requestKey!!)
+        presenter!!.getInitialData(requestKey!!)
     }
 
     private fun startSearch(query: String) {
@@ -78,7 +77,7 @@ class HomeActivity : AppCompatActivity(), MovieListReceiver, TextWatcher {
             currentTab!!.setProgressBarVisible(true)
 
             requestKey = requestKeyBuilder.generateRandomKey(keyLength)
-            controller!!.getInitialData(requestKey!!)
+            presenter!!.getInitialData(requestKey!!)
 
             hideLog()
         } else
@@ -91,7 +90,7 @@ class HomeActivity : AppCompatActivity(), MovieListReceiver, TextWatcher {
         if (currentPage < totalPages) {
             currentTab!!.setProgressBarVisible(true)
 
-            controller!!.getMovieByQuery(query, currentPage + 1, requestKey!!)
+            presenter!!.getMovieByQuery(query, currentPage + 1, requestKey!!)
         }
 
     }
@@ -100,7 +99,7 @@ class HomeActivity : AppCompatActivity(), MovieListReceiver, TextWatcher {
         if (currentPage < totalPages) {
             currentTab!!.setProgressBarVisible(true)
 
-            controller!!.getMovies(currentPage + 1, requestKey!!)
+            presenter!!.getMovies(currentPage + 1, requestKey!!)
         }
     }
 
@@ -184,13 +183,11 @@ class HomeActivity : AppCompatActivity(), MovieListReceiver, TextWatcher {
     }
 
     override fun displayLog(log: String) {
-        tvLog!!.visibility = View.VISIBLE
-        tvLog!!.text = log
-        currentTab!!.setProgressBarVisible(false)
+        currentTab!!.displayLog(log)
     }
 
     override fun hideLog() {
-        tvLog!!.visibility = View.GONE
+        currentTab!!.hideLog()
     }
 
     override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {

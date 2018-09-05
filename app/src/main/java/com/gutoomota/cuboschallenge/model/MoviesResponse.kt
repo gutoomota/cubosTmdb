@@ -2,7 +2,7 @@ package com.gutoomota.cuboschallenge.model
 
 import com.squareup.moshi.Json
 
-class UpcomingMoviesResponse {
+class MoviesResponse {
 
     var page: Int = 0
     var results: List<Movie>? = null
@@ -12,7 +12,7 @@ class UpcomingMoviesResponse {
     var totalResults: Int = 0
 
     override fun toString(): String {
-        return "UpcomingMoviesResponse{" +
+        return "MoviesResponse{" +
                 "page=" + page +
                 ", results=" + results +
                 ", totalPages=" + totalPages +
